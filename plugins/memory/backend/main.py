@@ -15,7 +15,7 @@ _FLUSH_STATE = None
 SERVICE_DESCRIPTORS = [{'contract': 'stella.memory@1', 'methods': [
     {'name': name, 'inputSchema': {'type': 'object'}, 'outputSchema': {'type': 'object'},
      'effect': 'query' if name in _READS else 'domainWrite',
-     'operation': 'read' if name in _READS else 'write',
+     'operation': 'delete' if name == 'restore_snapshot' else 'read' if name in _READS else 'write',
      'permissions': ['memory.read' if name in _READS else 'memory.write'] +
           (['models.embedding'] if name in _MODEL_EMBED else []) + (['models.chat'] if name in _MODEL_CHAT else []),
      'resourceScope': ['user'], 'idempotency': name not in _READS, 'timeoutMs': 30000}

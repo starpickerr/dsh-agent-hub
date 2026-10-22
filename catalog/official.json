@@ -6,56 +6,56 @@
       "hostApi": "^1.0.0",
       "version": "1.1.2",
       "path": "../plugins/bills",
-      "sha256": "92f0e949f0a4ad2f509be41913ab40b8160897c61882c899e3577864600270a3"
+      "sha256": "b6661ed71ba31f85d75f36d94cb6293d40efdf8401f5ab6cffb748706dde5a0c"
     },
     {
       "pluginId": "stella.calendar",
       "hostApi": "^1.0.0",
       "version": "1.1.2",
       "path": "../plugins/calendar",
-      "sha256": "956ad23b64f82ca50e35331fd13eff9b3bec8b430b6945fa5acf8c50569545f9"
+      "sha256": "c98fdf8b9386bcaafc174a0291f10964535f9c8d8b1731fb2ae75b407ac747e2"
     },
     {
       "pluginId": "stella.tasks",
       "hostApi": "^1.0.0",
       "version": "1.1.3",
       "path": "../plugins/tasks",
-      "sha256": "0a0147821245a3b2e5518c182637e9e59337f41c908f07eb4febe41be15e4680"
+      "sha256": "45300bdbd181f96130e206b53860bc4147d437e28fe7289368c0530d09058074"
     },
     {
       "pluginId": "stella.briefing",
       "hostApi": "^1.0.0",
       "version": "1.1.5",
       "path": "../plugins/briefing",
-      "sha256": "18453a44857387c1beecbc3705b8d220cc174420a6f4aeaeb675bc8fd10b1a3c"
+      "sha256": "ccb061822fe27466f7b2d365a64cf5bde3c321876f6301ace50d810753c16be3"
     },
     {
       "pluginId": "stella.automation",
       "hostApi": "^1.0.0",
       "version": "1.0.3",
       "path": "../plugins/automation",
-      "sha256": "cc78d767954a8a9344abaf591d61bb51b4e02d7bc32698f4f60e2a732f8b9c87"
+      "sha256": "80d719165ecd89c5029012d05562727a6bd04537fd14531760f23485e0c00e11"
     },
     {
       "pluginId": "stella.agent-hub",
       "hostApi": "^1.0.0",
       "version": "1.0.3",
       "path": "../plugins/agent-hub",
-      "sha256": "1106011bd39dfef5547e36bfdd9393c0163558befba1c95ae3c17336a6afa848"
+      "sha256": "05ee0187d38837a9a6b087e41f7be9d9db9cdc3e43c077a7a8a90b222bbed04d"
     },
     {
       "pluginId": "stella.knowledge",
       "hostApi": "^1.0.0",
       "version": "1.0.0",
       "path": "../plugins/knowledge",
-      "sha256": "9cc06c2367aef7765058c10e6e8d7b8563cad5f01e2b1c7045a33fc625d1707f"
+      "sha256": "a473dc6c1ef889f5ef72d6c8ba1bba195367d7d2a08178c101438a15d3f8d54a"
     },
     {
       "pluginId": "stella.memory",
       "hostApi": "^1.0.0",
       "version": "1.0.0",
       "path": "../plugins/memory",
-      "sha256": "bdb158aab9f170df0e6e9b0e15e50237f8f4056e347baf6a9cd08c0daaad0567"
+      "sha256": "5b62135831f029fb37157b8a64db01128ba8aa52c796c7089713ced754cdf0b3"
     }
   ]
 }

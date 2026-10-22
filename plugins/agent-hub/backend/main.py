@@ -38,7 +38,7 @@ METHODS: dict[str, tuple[str, str, bool, tuple[str, ...]]] = {
     "provider_cancel": ("domainWrite", W, True, ("execution_id",)),
 }
 
-OPERATION_OVERRIDES = {'delete_provider': 'delete', 'provider_start': 'system_execute', 'probe_provider': 'system_execute'}
+OPERATION_OVERRIDES = {'delete_provider': 'delete', 'provider_start': 'system_execute', 'probe_provider': 'system_execute', 'select_provider': 'system_execute'}
 
 SERVICE_DESCRIPTORS = [
     {
@@ -95,7 +95,9 @@ def handle_invoke(invoke_params: dict[str, Any]) -> dict[str, Any]:
             return _fail("invalid_argument", "Core execution lease required")
         params["task"] = dict(task)
     try:
-        value = getattr(_service(invoke_params), method)(**params)
+        from domain.providers._local_runtime import execution_sandbox
+        with execution_sandbox((invoke_params.get('_hostDataHandle') or {}).get('executionSandbox')):
+            value = getattr(_service(invoke_params), method)(**params)
     except ProviderNotFound as exc:
         return _fail("not_found", str(exc))
     except (ValueError, TypeError, KeyError) as exc:

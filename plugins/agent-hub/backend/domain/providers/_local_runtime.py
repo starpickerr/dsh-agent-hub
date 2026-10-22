@@ -5,8 +5,30 @@ from __future__ import annotations
 import os
 import subprocess
 import uuid
+from contextlib import contextmanager
+from contextvars import ContextVar
 from pathlib import Path
 from typing import Any
+
+_SANDBOX = ContextVar('host_execution_sandbox', default=None)
+
+
+@contextmanager
+def execution_sandbox(plan):
+    token = _SANDBOX.set(plan)
+    try:
+        yield
+    finally:
+        _SANDBOX.reset(token)
+
+
+def bound_command(argv):
+    plan = _SANDBOX.get()
+    if not isinstance(plan, dict) or plan.get('mode') != 'isolated' or not plan.get('prefix'):
+        raise PermissionError('Core execution sandbox required')
+    env = sanitized_env()
+    env.update(plan.get('env') or {})
+    return [*plan['prefix'], *argv], env
 
 
 def sanitized_env() -> dict[str, str]:
@@ -22,12 +44,13 @@ def sanitized_env() -> dict[str, str]:
 
 def run_version_probe(argv: list[str], *, timeout: float = 8.0) -> dict[str, Any]:
     try:
+        argv, env = bound_command(argv)
         result = subprocess.run(
             argv,
             capture_output=True,
             text=True,
             timeout=timeout,
-            env=sanitized_env(),
+            env=env,
             check=False,
         )
     except FileNotFoundError:

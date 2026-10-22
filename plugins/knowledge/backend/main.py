@@ -11,6 +11,9 @@ SERVICE_DESCRIPTORS = [{'contract': 'stella.knowledge@1', 'methods': [
     {'name': method, 'inputSchema': {'type': 'object'}, 'outputSchema': {'type': 'object'},
      'effect': 'query' if method in _READS else 'domainWrite',
      'operation': 'read' if method in _READS else 'write',
+     **({'operationCases': {**{action: 'write' for action in ('list', 'read', 'graph', 'create_category', 'rename_category',
+         'move_documents', 'create_document', 'import_documents')}, 'delete_category': 'delete', 'delete_documents': 'delete'}}
+        if method == 'dispatch' else {}),
      'permissions': ['knowledge.read' if method in _READS else 'knowledge.write'] + (['models.embedding'] if method == 'search' else []),
      'resourceScope': ['user'], 'idempotency': method not in _READS, 'timeoutMs': 30000}
     for method in (*_READS, 'dispatch')]}]

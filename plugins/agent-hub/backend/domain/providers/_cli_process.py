@@ -9,7 +9,7 @@ import threading
 from pathlib import Path
 from typing import Any, Iterator
 
-from domain.providers._local_runtime import new_run_id, sanitized_env
+from domain.providers._local_runtime import new_run_id, bound_command
 from domain.providers.base import ProviderAdapter
 
 
@@ -38,10 +38,11 @@ class ManagedCliProvider(ProviderAdapter):
         if not 0 < wall <= 3600:
             raise ValueError('maxWallTime must be between 0 and 3600 seconds')
         try:
+            argv, env = bound_command(argv)
             with output.open('w', encoding='utf-8') as stream:
                 process = subprocess.Popen(argv, stdin=subprocess.DEVNULL, stdout=stream,
                                            stderr=subprocess.STDOUT, cwd=str(workspace),
-                                           env=sanitized_env(), **({'process_group': 0} if os.name != 'nt' else {}))
+                                           env=env, **({'process_group': 0} if os.name != 'nt' else {}))
         except OSError as exc:
             return {'status': 'rejected', 'error': {'code': 'start_failed', 'message': str(exc)}}
         run_ref = new_run_id(self.provider_local_id)
