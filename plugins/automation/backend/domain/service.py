@@ -73,6 +73,11 @@ class AutomationService:
         if "run_permission_mode" in patch:
             updates["run_permission_mode"] = rules.normalize_run_permission(
                 patch["run_permission_mode"], origin=origin)
+        for field in ('run_policy_version', 'run_policy_revision'):
+            if field in patch:
+                if type(patch[field]) is not int or patch[field] < 1:
+                    raise ValueError('invalid host policy reference')
+                updates[field] = patch[field]
         resolved = dict(resolved or {})
         if set(resolved) - {"action", "notification_route"}:
             raise ValueError("resolved may only carry action and notification_route")

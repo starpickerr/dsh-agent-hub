@@ -10,7 +10,7 @@ from .cron import next_cron
 EXPLICIT_RUN_MODES = {"read-only", "workspace-write", "full-access"}
 ACTION_TYPES = ("agent_task", "send_message", "tool_call", "skill_call", "application_command")
 SILENT_CAPABLE = ("agent_task", "tool_call", "skill_call")
-UPDATE_FIELDS = {"name", "enabled", "schedule", "action", "notification_route", "run_permission_mode"}
+UPDATE_FIELDS = {"name", "enabled", "schedule", "action", "notification_route", "run_permission_mode", "run_policy_version", "run_policy_revision"}
 SCHEDULE_TYPES = ("cron", "interval", "once")
 
 

@@ -34,7 +34,7 @@
       "hostApi": "^1.0.0",
       "version": "1.0.3",
       "path": "../plugins/automation",
-      "sha256": "a1a1d69a61b4e0f788a07c97fba00c88d8aa0efe7ed98589507742c339786890"
+      "sha256": "cc78d767954a8a9344abaf591d61bb51b4e02d7bc32698f4f60e2a732f8b9c87"
     },
     {
       "pluginId": "stella.agent-hub",
