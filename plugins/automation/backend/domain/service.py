@@ -61,7 +61,9 @@ class AutomationService:
     def update_task(self, task_id: str, patch: dict, resolved: dict | None = None,
                     origin: str = "user") -> dict:
         original = self.get_task(task_id)
-        if original.get("linked_todo_id"):
+        policy_only = isinstance(patch, dict) and bool(patch) and not set(patch) - {
+            'run_permission_mode', 'run_policy_version', 'run_policy_revision'}
+        if original.get("linked_todo_id") and not policy_only:
             raise ValueError("请在关联事务中修改提醒时间和渠道")
         if not isinstance(patch, dict):
             raise ValueError("task update must be an object")
@@ -88,7 +90,7 @@ class AutomationService:
             raise ValueError("action updates must be resolved by the host")
         if "notification_route" in patch and "notification_route" not in resolved:
             raise ValueError("notification_route updates must be resolved by the host")
-        if "schedule" in patch or "next_run_at" not in original:
+        if "schedule" in patch or ("next_run_at" not in original and not policy_only):
             next_run = rules.calculate_next_run({**original, **updates}, datetime.now())
             if not next_run:
                 raise ValueError("Cannot calculate next run time")
