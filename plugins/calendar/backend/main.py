@@ -37,6 +37,8 @@ _METHODS = (
 )
 WRITE_METHODS = frozenset(name for name, effect, _p, _i in _METHODS if effect == "domainWrite")
 
+OPERATION_OVERRIDES = {'delete_event': 'delete', 'delete_category': 'delete'}
+
 SERVICE_DESCRIPTORS = [
     {
         "contract": "stella.calendar@1",
@@ -46,6 +48,7 @@ SERVICE_DESCRIPTORS = [
                 "inputSchema": {"type": "object"},
                 "outputSchema": {"type": "object"},
                 "effect": effect,
+                "operation": OPERATION_OVERRIDES.get(name, "read" if effect == "query" else "write"),
                 "permissions": [perm],
                 "resourceScope": ["user"],
                 "idempotency": idem,

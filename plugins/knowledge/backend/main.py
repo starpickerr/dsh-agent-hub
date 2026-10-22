@@ -10,6 +10,7 @@ _READS = ('list_tree', 'read_file', 'build_graph', 'search', 'get_context')
 SERVICE_DESCRIPTORS = [{'contract': 'stella.knowledge@1', 'methods': [
     {'name': method, 'inputSchema': {'type': 'object'}, 'outputSchema': {'type': 'object'},
      'effect': 'query' if method in _READS else 'domainWrite',
+     'operation': 'read' if method in _READS else 'write',
      'permissions': ['knowledge.read' if method in _READS else 'knowledge.write'] + (['models.embedding'] if method == 'search' else []),
      'resourceScope': ['user'], 'idempotency': method not in _READS, 'timeoutMs': 30000}
     for method in (*_READS, 'dispatch')]}]

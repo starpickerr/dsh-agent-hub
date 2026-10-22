@@ -69,6 +69,8 @@ METHODS: dict[str, tuple[str, str, bool, tuple[str, ...]]] = {
 
 BRIEFING_APPLICATION_METHODS = tuple(list(METHODS)[:25])
 
+OPERATION_OVERRIDES = {'delete_rule': 'delete', 'delete_action_rule': 'delete', 'delete_briefing': 'delete', 'revoke_authorization': 'delete'}
+
 SERVICE_DESCRIPTORS = [
     {
         "contract": CONTRACT,
@@ -82,6 +84,7 @@ SERVICE_DESCRIPTORS = [
                 },
                 "outputSchema": {},
                 "effect": effect,
+                "operation": OPERATION_OVERRIDES.get(name, "read" if effect == "query" else "write"),
                 "permissions": [perm],
                 "resourceScope": ["user"],
                 "idempotency": idem,

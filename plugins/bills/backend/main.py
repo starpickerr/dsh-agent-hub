@@ -14,6 +14,8 @@ _BACKEND = Path(__file__).resolve().parent
 if str(_BACKEND) not in sys.path:
     sys.path.insert(0, str(_BACKEND))
 
+OPERATION_OVERRIDES = {'delete_ledger': 'delete', 'delete_budget': 'delete', 'delete_account': 'delete', 'delete_recurring': 'delete'}
+
 SERVICE_DESCRIPTORS = [
     {
         "contract": "stella.bills@1",
@@ -23,6 +25,7 @@ SERVICE_DESCRIPTORS = [
                 "inputSchema": {"type": "object"},
                 "outputSchema": {"type": "object"},
                 "effect": effect,
+                "operation": OPERATION_OVERRIDES.get(name, "read" if effect == "query" else "write"),
                 "permissions": [perm],
                 "resourceScope": ["user"],
                 "idempotency": idem,

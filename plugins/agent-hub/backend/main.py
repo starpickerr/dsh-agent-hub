@@ -38,6 +38,8 @@ METHODS: dict[str, tuple[str, str, bool, tuple[str, ...]]] = {
     "provider_cancel": ("domainWrite", W, True, ("execution_id",)),
 }
 
+OPERATION_OVERRIDES = {'delete_provider': 'delete', 'provider_start': 'system_execute', 'probe_provider': 'system_execute'}
+
 SERVICE_DESCRIPTORS = [
     {
         "contract": CONTRACT,
@@ -51,6 +53,7 @@ SERVICE_DESCRIPTORS = [
                 },
                 "outputSchema": {},
                 "effect": effect,
+                "operation": OPERATION_OVERRIDES.get(name, "read" if effect == "query" else "write"),
                 "permissions": [perm],
                 "resourceScope": ["user"],
                 "idempotency": idem,

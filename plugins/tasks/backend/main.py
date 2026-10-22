@@ -74,6 +74,8 @@ METHODS: dict[str, tuple[str, str, bool, tuple[str, ...]]] = {
     "set_todo_category": ("domainWrite", "tasks.write", True, ("todo_id", "category_id")),
 }
 
+OPERATION_OVERRIDES = {'delete_todo': 'delete', 'delete_external_todo': 'delete', 'delete_category': 'delete'}
+
 SERVICE_DESCRIPTORS = [
     {
         "contract": CONTRACT,
@@ -87,6 +89,7 @@ SERVICE_DESCRIPTORS = [
                 },
                 "outputSchema": {},
                 "effect": effect,
+                "operation": OPERATION_OVERRIDES.get(name, "read" if effect == "query" else "write"),
                 "permissions": [perm],
                 "resourceScope": ["user"],
                 "idempotency": idem,
