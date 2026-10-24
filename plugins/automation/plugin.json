@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "stella.automation",
   "name": "自动化",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "hostApi": "^1.0.0",
   "runtime": {
     "kind": "python",
@@ -34,5 +34,9 @@
       "capability": "automation.write",
       "required": true
     }
-  ]
+  ],
+  "description": {
+    "zh": "创建和管理定时任务、提醒与周期性自动化规则。后台执行沿用任务的权限模式，通知使用已配置的渠道。",
+    "en": "Create and manage scheduled tasks, reminders, and recurring automation rules. Background runs use the task permission mode and notifications use configured channels."
+  }
 }

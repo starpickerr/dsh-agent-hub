@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "stella.briefing",
   "name": "简报",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "hostApi": "^1.0.0",
   "runtime": {
     "kind": "python",
@@ -34,5 +34,9 @@
       "capability": "briefing.write",
       "required": true
     }
-  ]
+  ],
+  "description": {
+    "zh": "汇总已配置来源的信息，生成和查看每日简报，维护简报条目与规则。生成结果取决于可用来源及当前授权范围。",
+    "en": "Collect information from configured sources, generate and review daily briefings, and manage items and rules. Results depend on available sources and current access permissions."
+  }
 }
