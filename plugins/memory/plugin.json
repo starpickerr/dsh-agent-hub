@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "stella.memory",
   "name": "记忆",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "hostApi": "^1.0.0",
   "runtime": {
     "kind": "python",
@@ -50,5 +50,9 @@
       "capability": "models.chat",
       "required": true
     }
-  ]
+  ],
+  "description": {
+    "zh": "保存、检索和维护长期记忆，为启用记忆的对话提供上下文。记忆与知识文档分别管理，读取和更新遵循当前权限。",
+    "en": "Store, search, and maintain long-term memory for conversations with memory enabled. Memory is managed separately from knowledge documents; reads and updates follow current permissions."
+  }
 }

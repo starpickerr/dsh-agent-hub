@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "stella.knowledge",
   "name": "知识",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "hostApi": "^1.0.0",
   "runtime": {
     "kind": "python",
@@ -46,5 +46,9 @@
       "capability": "models.embedding",
       "required": true
     }
-  ]
+  ],
+  "description": {
+    "zh": "保存、检索和维护知识文档，为对话提供可引用的资料。可在知识页面整理内容，Agent 通过知识工具读取或更新授权范围内的文档。",
+    "en": "Store, search, and maintain knowledge documents for use as conversation references. Organize content on the Knowledge page; Agent knowledge tools read or update documents within their permitted scope."
+  }
 }

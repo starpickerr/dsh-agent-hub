@@ -12,6 +12,8 @@ First-party business plugins for [Stella](https://github.com/starpickerr/Stella)
 
 Packages must not import Stella `agent.*`.
 
+Each plugin owns its public introduction in `plugin.json` under `description` (a string or a `{"zh": "…", "en": "…"}` object). Core reads the installed manifest; an optional package `README.md` supplies the detailed overview. Keep these descriptions with the plugin rather than duplicating business copy in Core. Metadata changes advance the package patch version and require refreshing `catalog/official.json` versions and SHA256 digests; installed older packages obtain the introduction through the normal update flow.
+
 - `catalog/official.json` — checkout installs; each `path` is relative to the catalog file (for example `../plugins/tasks`).
 - `catalog/release.example.json` — template for GitHub Release `url` + `sha256`.
 - `scripts/build_release_catalog.py` — builds signed ZIPs under `dist/signed/` and writes local `catalog/release.json` with relative `url`s (requires `STELLA_PLUGIN_SIGNING_SECRET`). Do not commit machine-local absolute paths.
