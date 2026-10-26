@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "stella.agent-hub",
   "name": "Agent 协作",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "hostApi": "^1.0.0",
   "runtime": {
     "kind": "python",
