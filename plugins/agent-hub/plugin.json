@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "stella.agent-hub",
   "name": "Agent 协作",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "hostApi": "^1.0.0",
   "runtime": {
     "kind": "python",
@@ -11,7 +11,7 @@
   },
   "data": {
     "namespace": "stella.agent-hub",
-    "schemaVersion": 2,
+    "schemaVersion": 3,
     "migrationEntry": "backend/migrate.py"
   },
   "contributes": {

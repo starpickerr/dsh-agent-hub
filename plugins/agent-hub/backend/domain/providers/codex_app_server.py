@@ -79,7 +79,7 @@ class CodexAppServerProvider(ProviderAdapter):
         return {"status": "rejected", "error": {"code": "unsupported_protocol_execution",
                 "message": "Protocol task execution is not implemented; choose a CLI access mode."}}
 
-    def observe(self, external_run_ref: str) -> Iterator[dict[str, Any]]:
+    def observe(self, external_run_ref: str, after_cursor: int = 0) -> Iterator[dict[str, Any]]:
         raise UnsupportedCapability("observe")
 
     def request_cancel(self, external_run_ref: str) -> dict[str, Any]:

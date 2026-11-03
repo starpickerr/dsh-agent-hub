@@ -27,3 +27,15 @@ CREATE TABLE IF NOT EXISTS external_runs (
 );
 
 CREATE INDEX IF NOT EXISTS ext_runs_by_provider ON external_runs(provider_config_id, updated_at);
+
+-- Task aggregates are updated atomically with optimistic revisions.
+CREATE TABLE IF NOT EXISTS hub_tasks (
+    task_id TEXT PRIMARY KEY,
+    document_json TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS hub_requests (
+    request_id TEXT PRIMARY KEY,
+    fingerprint TEXT NOT NULL,
+    result_json TEXT NOT NULL
+);

@@ -26,14 +26,15 @@ class CursorCliProvider(ManagedCliProvider):
             "contractVersion": "1",
             "taskKinds": ["coding.task", "research.report", "general.delegate"],
             "capabilities": {
-                "streaming": False,
+                "streaming": True,
                 "persistentSession": False,
                 "reattach": False,
                 "continuation": False,
                 "approvalBridge": False,
                 "statusQuery": False,
-                "structuredOutput": False,
+                "structuredOutput": True,
                 "artifacts": True,
+                "modelSelection": "explicit-id",
                 "usage": False,
                 "cost": False,
                 "localOrRemote": "local",
@@ -51,8 +52,8 @@ class CursorCliProvider(ManagedCliProvider):
         name = Path(binary).name.lower()
         # Print mode only — never --force / --yolo.
         if name == "cursor":
-            return [binary, "agent", "-p", "--output-format", "text", goal]
-        return [binary, "-p", "--output-format", "text", goal]
+            return [binary, "agent", "-p", "--output-format", "stream-json", goal]
+        return [binary, "-p", "--output-format", "stream-json", goal]
 
     def probe(self) -> dict[str, Any]:
         binary = self.resolve_binary()
@@ -85,4 +86,4 @@ class CursorCliProvider(ManagedCliProvider):
         binary = self.resolve_binary()
         if not binary:
             return {"status": "rejected", "error": {"code": "not_configured", "message": "CLI binary missing"}}
-        return self._start_cli(self._print_argv(binary, task.get("goal") or ""), task, "cursor-result.txt")
+        return self._start_cli([*self._print_argv(binary, "")[:-1], *self.model_args(task), self.task_prompt(task)], task, "cursor-result.txt")

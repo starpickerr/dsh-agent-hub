@@ -7,13 +7,14 @@ from typing import Any
 
 from domain.providers import DEFAULT_CATALOG, get_adapter, resolve_identity
 from domain.store import AgentHubStore
+from domain.collaboration import Collaboration
 
 
 class ProviderNotFound(KeyError):
     pass
 
 
-class AgentHubService:
+class AgentHubService(Collaboration):
     def __init__(self, store: AgentHubStore):
         self.store = store
         self._run_adapters = {}
@@ -187,14 +188,14 @@ class AgentHubService:
             )
         return {**result, "adapterVersion": adapter.adapter_version}
 
-    def provider_observe(self, execution_id: str) -> list[dict[str, Any]]:
+    def provider_observe(self, execution_id: str, after_cursor: int = 0) -> list[dict[str, Any]]:
         mapping = self.get_external_run(execution_id)
         if mapping is None or not mapping.get("externalRunRef"):
             raise ProviderNotFound(execution_id)
         adapter = self._run_adapters.get(execution_id)
         if adapter is None:
             return [{"type": "terminal", "status": "outcome_unknown", "error": {"code": "run_not_attached"}}]
-        events = list(adapter.observe(mapping["externalRunRef"]))
+        events = list(adapter.observe(mapping["externalRunRef"], after_cursor=after_cursor))
         terminal = next((e for e in reversed(events) if e.get("type") == "terminal"), None)
         if terminal and terminal.get("status") in {"succeeded", "failed", "cancelled", "outcome_unknown"}:
             self.map_external_run({**mapping, "status": terminal["status"]})
