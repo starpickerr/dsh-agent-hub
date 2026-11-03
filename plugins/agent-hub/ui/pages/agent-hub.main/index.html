@@ -1,48 +1,25 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Agent 协作</title>
-  <style>
-    :root { color-scheme: light; font-family: "SF Pro Text", "PingFang SC", sans-serif; }
-    body { margin: 0; padding: 24px; background: #f6f4ef; color: #1c1917; }
-    h1 { font-size: 1.35rem; margin: 0 0 8px; }
-    p { margin: 0 0 16px; color: #57534e; line-height: 1.5; }
-    button { font: inherit; padding: 8px 12px; border-radius: 8px; border: 1px solid #1c1917; background: #1c1917; color: #fafaf9; cursor: pointer; margin-right: 8px; }
-    button.secondary { background: #fff; color: #1c1917; }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
-    #status { margin-top: 16px; font-size: 0.9rem; white-space: pre-wrap; }
-    #empty { display: none; padding: 20px; border: 1px dashed #a8a29e; border-radius: 12px; background: #fff; margin-bottom: 20px; }
-    #list, #runs { margin-top: 16px; display: grid; gap: 12px; }
-    .agent { background: #fff; border: 1px solid #e7e5e4; border-radius: 12px; padding: 14px; }
-    .agent > h3 { margin: 0 0 4px; font-size: 1.05rem; }
-    .agent > .meta { margin-bottom: 10px; }
-    .modes { display: grid; gap: 8px; }
-    .mode { border: 1px solid #e7e5e4; border-radius: 10px; padding: 10px 12px; background: #fafaf9; }
-    .mode h4 { margin: 0 0 4px; font-size: 0.95rem; font-weight: 600; }
-    .meta { font-size: 0.8rem; color: #78716c; }
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; background: #e7e5e4; font-size: 0.75rem; margin-left: 6px; }
-    .badge.ready { background: #dcfce7; }
-    .badge.blocked { background: #fee2e2; }
-    .row { background: #fff; border: 1px solid #e7e5e4; border-radius: 10px; padding: 12px; }
-    .row h3 { margin: 0 0 4px; font-size: 1rem; }
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent 协作</title>
+<style>
+:root{color-scheme:light dark;font-family:system-ui,-apple-system,"PingFang SC",sans-serif;--bg-base:#f9fafb;--bg-surface:#fff;--bg-surface-2:#f3f4f6;--bg-inset:#f3f4f6;--text-primary:#1e293b;--text-secondary:#475569;--text-tertiary:#64748b;--border-default:#e5e7eb;--accent:#4abe6e;--accent-soft:rgba(74,190,110,.12);--accent-contrast:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg-base);color:var(--text-primary);font-size:13px}button,input,textarea,select{font:inherit;color:inherit}button{cursor:pointer;background:var(--bg-surface);border:1px solid var(--border-default);border-radius:8px;padding:8px 11px}button:hover{background:var(--bg-surface-2)}button:disabled{opacity:.45;cursor:default}button.primary{background:var(--accent);color:var(--accent-contrast);border-color:transparent}button[aria-pressed=true],button.selected{background:var(--accent-soft);border-color:var(--accent)}:focus-visible{outline:2px solid var(--accent);outline-offset:2px}input,textarea,select{background:var(--bg-inset);border:1px solid var(--border-default);border-radius:7px;padding:9px;width:100%}textarea{resize:vertical;min-height:80px}label{display:grid;gap:6px;margin:12px 0}h1,h2,h3,p{margin:0}h1{font-size:17px}h2{font-size:15px}h3{font-size:13px}small,.muted{color:var(--text-tertiary);font-size:12px}.app{height:100dvh;display:grid;grid-template-columns:220px minmax(280px,1fr) 340px}.sidebar,.inspector{background:var(--bg-surface);min-height:0;overflow:auto;padding:18px}.sidebar{border-right:1px solid var(--border-default);display:flex;flex-direction:column;gap:16px}.inspector{border-left:1px solid var(--border-default)}.sidebar header{display:flex;align-items:center;justify-content:space-between;gap:8px}.task-list{display:grid;gap:7px}.task-row{display:grid;text-align:left;gap:7px;overflow-wrap:anywhere}.task-row strong{font-weight:550}.sidebar footer{margin-top:auto;display:grid;gap:8px}.conversation{display:flex;flex-direction:column;min-width:0;min-height:0}.conversation>header{padding:20px 24px;border-bottom:1px solid var(--border-default);display:flex;gap:12px;align-items:center;justify-content:space-between;background:var(--bg-surface)}.title{min-width:0;overflow-wrap:anywhere}.title p{margin-top:5px}.actions{display:flex;gap:6px;flex-wrap:wrap}.messages{flex:1;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:18px}.message{max-width:100%;line-height:1.7}.message .body{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:5px}.message.user{margin-left:24px;background:var(--accent-soft);padding:12px 16px;border-radius:12px}.message.configuration,.message.status{font-size:12px;color:var(--text-secondary);border-left:2px solid var(--border-default);padding-left:12px}.message button{font-size:11px;margin-top:8px;padding:4px 7px}.composer{padding:14px 24px 20px;border-top:1px solid var(--border-default);background:var(--bg-surface)}.composer .row{display:flex;gap:8px;align-items:center;margin-bottom:8px}.composer select{width:auto;max-width:180px}.composer textarea{min-height:90px;background:var(--bg-surface)}.composer .bottom{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:10px}.notice{min-height:18px;font-size:12px;color:var(--text-secondary);padding:0 24px 8px;overflow-wrap:anywhere}.tabs{display:flex;gap:5px;margin-bottom:18px}.tabs button{flex:1}.panel{display:grid;gap:12px}.card{border:1px solid var(--border-default);border-radius:10px;padding:12px;min-width:0}.card p{margin-top:6px;line-height:1.6;overflow-wrap:anywhere}.flow-diagram{overflow:auto;max-height:300px}.flow-diagram svg{display:block;width:100%;font:11px system-ui}.flow-diagram rect{fill:var(--bg-surface-2);stroke:var(--border-default)}.flow-diagram text{fill:var(--text-primary)}.flow-diagram .flow-status{fill:var(--text-secondary);font-size:10px}.flow-edge{fill:none;stroke:var(--accent);stroke-width:1.5}.steps{display:grid;gap:10px}.step{width:100%;text-align:left;display:grid;gap:6px}.step .deps{font-size:11px;color:var(--text-tertiary)}.badge{font-size:11px;border-radius:20px;background:var(--bg-surface-2);padding:3px 7px;display:inline-block}.empty{margin:auto;max-width:420px;text-align:center;padding:30px;line-height:1.8}.empty h2{font-size:20px;margin-bottom:10px}.log{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;font-family:ui-monospace,monospace;font-size:11px;max-height:55vh;overflow:auto}.check{display:flex;gap:8px;align-items:center}.check input{width:auto}.mobile-nav{display:none;padding:8px;gap:8px;background:var(--bg-surface);border-bottom:1px solid var(--border-default)}dialog{background:var(--bg-surface);color:var(--text-primary);border:1px solid var(--border-default);border-radius:14px;max-width:540px;width:calc(100% - 30px);max-height:90dvh;padding:24px}dialog::backdrop{background:rgba(0,0,0,.35)}dialog .actions{justify-content:flex-end;margin-top:20px}.form-error{color:#dc2626;white-space:pre-wrap}.participant-option{padding:10px;border:1px solid var(--border-default);border-radius:8px}.participant-option small{display:block;margin-left:22px}.workflow-item{border-bottom:1px solid var(--border-default);padding:10px 0}.dependency-options{display:flex;gap:10px;flex-wrap:wrap}.dependency-options label{margin:4px 0;font-size:12px}.provider{margin-bottom:10px}.provider .actions{margin-top:10px}.hidden,[hidden]{display:none!important}
+@media(max-width:1150px){.app{grid-template-columns:180px minmax(260px,1fr) 290px}.sidebar,.inspector{padding:14px}.conversation>header,.messages{padding:16px}.composer{padding:12px 16px}}
+@media(max-width:850px){.mobile-nav{display:flex}.app{height:calc(100dvh - 51px);display:block}.conversation{height:100%}.sidebar,.inspector{display:none;height:100%;border:0}body[data-pane=tasks] .sidebar,body[data-pane=details] .inspector{display:flex;flex-direction:column}body[data-pane=tasks] .conversation,body[data-pane=details] .conversation{display:none}.inspector .panel{display:grid}.empty{padding:20px}.composer .row{flex-wrap:wrap}.conversation>header{align-items:flex-start}}
+</style>
 </head>
-<body>
-  <h1>Agent 协作</h1>
-  <p>按 Agent 管理多种接入方式（CLI / App Server / ACP 等）。同一 Agent 切换接入不改变身份。未配置不影响其他功能。</p>
-  <div id="empty">
-    <strong>尚未配置可用接入</strong>
-    <p style="margin-top:8px">启用并探测至少一个本地接入后，即可委托专业任务。不会自动安装 CLI，也不会使用 --force / --yolo。</p>
-  </div>
-  <button id="defaults" type="button" class="secondary">初始化默认接入</button>
-  <button id="refresh" type="button">刷新</button>
-  <div id="status"></div>
-  <h2 style="font-size:1.05rem;margin-top:24px">Agents 与接入方式</h2>
-  <div id="list"></div>
-  <h2 style="font-size:1.05rem;margin-top:24px">最近委托</h2>
-  <div id="runs"></div>
-  <script src="./app.js"></script>
-</body>
-</html>
+<body data-pane="chat">
+<nav class="mobile-nav" aria-label="工作台区域"><button data-pane="tasks">任务</button><button data-pane="chat">对话</button><button data-pane="details">详情</button></nav>
+<main class="app">
+<aside class="sidebar" aria-label="任务列表"><header><h1>Agent 协作</h1><button id="new-task" aria-label="新建任务">＋</button></header><div id="task-list" class="task-list"></div><footer><button id="connections">管理接入</button><button id="history">历史委托</button><button id="refresh">刷新</button></footer></aside>
+<section class="conversation" aria-label="正式对话"><header><div class="title"><h2 id="task-title">一起完成下一件事</h2><p id="task-meta" class="muted">选择参与者，分工、交流与交付</p></div><div class="actions"><button id="workflow" disabled>编辑流程</button><button id="start" class="primary" disabled>启动</button><button id="cancel" disabled>取消</button></div></header><div id="messages" class="messages" aria-live="polite"></div><div id="notice" class="notice" role="status"></div><form id="composer" class="composer"><div class="row"><select id="recipient" aria-label="消息接收者"><option value="">公共交流</option></select><select id="intent" aria-label="消息意图"><option value="message">发送消息</option><option value="persona">设定人设</option></select><button id="mention" type="button" aria-label="选择 @Agent">@Agent</button></div><textarea id="draft" aria-label="输入消息" placeholder="发送正式消息，或选择 @Agent 设置人设…" disabled></textarea><div class="bottom"><small>过程输出在右侧查看 · ⌘ / Ctrl + Enter 发送</small><div class="actions"><button id="send" type="submit" disabled>发送</button><button id="send-run" type="button" class="primary" disabled>发送并执行</button></div></div></form></section>
+<aside class="inspector" aria-label="任务详情"><nav class="tabs" aria-label="详情视图"><button data-tab="flow" aria-pressed="true">流程</button><button data-tab="process" aria-pressed="false">过程</button><button data-tab="agents" aria-pressed="false">Agents</button></nav><div id="panel" class="panel"></div></aside>
+</main>
+<dialog id="create-dialog"><form id="create-form"><h2>新建协作任务</h2><label>任务标题<input id="create-title" required maxlength="160" autocomplete="off"></label><label>目标<textarea id="create-goal" required maxlength="16000"></textarea></label><h3>选择参与者</h3><p class="muted">各参与者地位相同，可只选择外部 Agent。</p><div id="participant-options"></div><p id="create-error" class="form-error" role="alert"></p><div class="actions"><button type="button" data-close>取消</button><button class="primary" type="submit">创建任务</button></div></form></dialog>
+<dialog id="workflow-dialog"><form id="workflow-form"><h2>任务流程</h2><p class="muted">选择执行者与前置步骤；没有依赖的步骤可并行执行。</p><div id="workflow-items"></div><button type="button" id="add-step">＋ 添加步骤</button><p id="workflow-error" class="form-error" role="alert"></p><div class="actions"><button type="button" data-close>取消</button><button class="primary" type="submit">保存流程</button></div></form></dialog>
+<dialog id="connections-dialog"><h2>管理接入</h2><p class="muted">启用并探测已安装的接入。未实现的协议无法启动。</p><div id="provider-list"></div><div class="actions"><button id="defaults">初始化默认接入</button><button data-close>关闭</button></div></dialog>
+<dialog id="history-dialog"><h2>历史委托</h2><p class="muted">历史执行保留原记录，不推断过去的人设或模型。</p><div id="history-list"></div><div class="actions"><button data-close>关闭</button></div></dialog>
+<script src="./app.js"></script>
+</body></html>

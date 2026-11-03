@@ -21,6 +21,17 @@ CONTRACT = "stella.agent-hub@1"
 R, W = "agent_hub.read", "agent_hub.write"
 
 METHODS: dict[str, tuple[str, str, bool, tuple[str, ...]]] = {
+    "list_tasks": ("query", R, False, ('limit',)),
+    "get_task": ("query", R, False, ('task_id',)),
+    "create_task": ("domainWrite", W, True, ('payload', 'request_id')),
+    "add_participant": ("domainWrite", W, True, ("task_id", "participant", "expected_revision", "request_id")),
+    "set_coordinator": ("domainWrite", W, True, ("task_id", "participant_id", "expected_revision", "request_id")),
+    "update_participant": ("domainWrite", W, True, ('task_id', 'participant_id', 'patch', 'expected_revision', 'request_id')),
+    "post_message": ("domainWrite", W, True, ('task_id', 'body', 'recipient_ids', 'intent', 'expected_revision', 'request_id')),
+    "set_workflow": ("domainWrite", W, True, ('task_id', 'steps', 'expected_revision', 'request_id')),
+    "claim_step": ("domainWrite", W, True, ('task_id', 'step_id', 'retry')),
+    "sync_attempt": ("domainWrite", W, True, ('task_id', 'step_id', 'execution_id', 'result')),
+    "mark_cancelled": ("domainWrite", W, True, ('task_id',)),
     "list_catalog": ("query", R, False, ()),
     "status_overview": ("query", R, False, ()),
     "list_providers": ("query", R, False, ("enabled_only",)),
@@ -34,7 +45,7 @@ METHODS: dict[str, tuple[str, str, bool, tuple[str, ...]]] = {
     "get_external_run": ("query", R, False, ("execution_id",)),
     "list_external_runs": ("query", R, False, ("limit",)),
     "provider_start": ("domainWrite", W, True, ("provider_config_id", "task")),
-    "provider_observe": ("query", R, False, ("execution_id",)),
+    "provider_observe": ("query", R, False, ("execution_id", "after_cursor")),
     "provider_cancel": ("domainWrite", W, True, ("execution_id",)),
 }
 
@@ -89,6 +100,8 @@ def handle_invoke(invoke_params: dict[str, Any]) -> dict[str, Any]:
     unknown = sorted(set(params) - set(allowed))
     if unknown:
         return _fail("invalid_argument", f"unknown parameters for {method}: {', '.join(unknown)}")
+    if method in {"claim_step", "sync_attempt", "mark_cancelled"} and not (invoke_params.get("_hostDataHandle") or {}).get("hubCoordinator"):
+        return _fail("permission_denied", "Core coordinator required")
     if method == "provider_start":
         task = (invoke_params.get("_hostDataHandle") or {}).get("executionTask")
         if not task:

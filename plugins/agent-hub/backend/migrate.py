@@ -8,9 +8,9 @@ from typing import Any
 
 from domain.store import AgentHubStore
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION = 3
 _SCHEMA = Path(__file__).resolve().parent / "domain" / "schema.sql"
-REQUIRED_TABLES = frozenset({"provider_configs", "external_runs"})
+REQUIRED_TABLES = frozenset({"provider_configs", "external_runs", "hub_tasks", "hub_requests"})
 
 
 def _db_path(data_handle: dict[str, Any]) -> Path | None:

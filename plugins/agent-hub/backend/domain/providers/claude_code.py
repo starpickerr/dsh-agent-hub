@@ -24,14 +24,15 @@ class ClaudeCodeProvider(ManagedCliProvider):
             "contractVersion": "1",
             "taskKinds": ["coding.task", "research.report", "general.delegate"],
             "capabilities": {
-                "streaming": False,
+                "streaming": True,
                 "persistentSession": False,
                 "reattach": False,
                 "continuation": False,
                 "approvalBridge": False,
                 "statusQuery": False,
-                "structuredOutput": False,
+                "structuredOutput": True,
                 "artifacts": True,
+                "modelSelection": "explicit-id",
                 "usage": False,
                 "cost": False,
                 "localOrRemote": "local",
@@ -76,4 +77,4 @@ class ClaudeCodeProvider(ManagedCliProvider):
         binary = self.resolve_binary()
         if not binary:
             return {"status": "rejected", "error": {"code": "not_configured", "message": "CLI binary missing"}}
-        return self._start_cli([binary, "-p", task.get("goal") or "", "--output-format", "text"], task, "claude-result.txt")
+        return self._start_cli([binary, "-p", "--output-format", "stream-json", "--verbose", *self.model_args(task), self.task_prompt(task)], task, "claude-result.txt")

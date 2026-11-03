@@ -50,7 +50,7 @@ class ProviderAdapter(ABC):
         ...
 
     @abstractmethod
-    def observe(self, external_run_ref: str) -> Iterator[dict[str, Any]]:
+    def observe(self, external_run_ref: str, after_cursor: int = 0) -> Iterator[dict[str, Any]]:
         ...
 
     @abstractmethod
