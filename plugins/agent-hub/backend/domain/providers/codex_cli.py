@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from domain.providers._local_runtime import run_version_probe, write_goal_file
+from domain.providers._local_runtime import run_version_probe
 from domain.providers._cli_process import ManagedCliProvider
 
 
@@ -76,5 +76,4 @@ class CodexCliProvider(ManagedCliProvider):
         if not binary:
             return {"status": "rejected", "error": {"code": "not_configured", "message": "CLI binary missing"}}
         workspace = Path(task["workspacePath"])
-        write_goal_file(workspace, task.get("goal") or "")
         return self._start_cli([binary, "exec", "--skip-git-repo-check", "--cd", str(workspace), task.get("goal") or ""], task, "codex-result.txt")
